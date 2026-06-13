@@ -14,14 +14,49 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       appointments: {
         Row: {
           age: number | null
           concern: string | null
           created_at: string
           email: string | null
+          follow_up_date: string | null
           full_name: string
           id: string
+          internal_notes: string | null
           notes: string | null
           phone: string
           preferred_date: string
@@ -35,8 +70,10 @@ export type Database = {
           concern?: string | null
           created_at?: string
           email?: string | null
+          follow_up_date?: string | null
           full_name: string
           id?: string
+          internal_notes?: string | null
           notes?: string | null
           phone: string
           preferred_date: string
@@ -50,8 +87,10 @@ export type Database = {
           concern?: string | null
           created_at?: string
           email?: string | null
+          follow_up_date?: string | null
           full_name?: string
           id?: string
+          internal_notes?: string | null
           notes?: string | null
           phone?: string
           preferred_date?: string
@@ -64,31 +103,73 @@ export type Database = {
       }
       contacts: {
         Row: {
+          archived: boolean
           created_at: string
           email: string
           full_name: string
           id: string
+          internal_notes: string | null
+          is_important: boolean
           message: string
           phone: string | null
           subject: string | null
         }
         Insert: {
+          archived?: boolean
           created_at?: string
           email: string
           full_name: string
           id?: string
+          internal_notes?: string | null
+          is_important?: boolean
           message: string
           phone?: string | null
           subject?: string | null
         }
         Update: {
+          archived?: boolean
           created_at?: string
           email?: string
           full_name?: string
           id?: string
+          internal_notes?: string | null
+          is_important?: boolean
           message?: string
           phone?: string | null
           subject?: string | null
+        }
+        Relationships: []
+      }
+      faqs: {
+        Row: {
+          answer: string
+          category: string
+          created_at: string
+          id: string
+          is_active: boolean
+          question: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question?: string
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -115,6 +196,126 @@ export type Database = {
           full_name?: string | null
           id?: string
           phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          benefits: Json
+          created_at: string
+          description: string | null
+          duration_minutes: number | null
+          icon: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          is_featured: boolean
+          name: string
+          price: string | null
+          seo_description: string | null
+          seo_title: string | null
+          short_description: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          benefits?: Json
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          name: string
+          price?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          short_description?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          benefits?: Json
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          name?: string
+          price?: string | null
+          seo_description?: string | null
+          seo_title?: string | null
+          short_description?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      testimonials: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          image_url: string | null
+          is_approved: boolean
+          is_featured: boolean
+          patient_location: string | null
+          patient_name: string
+          rating: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean
+          is_featured?: boolean
+          patient_location?: string | null
+          patient_name: string
+          rating?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean
+          is_featured?: boolean
+          patient_location?: string | null
+          patient_name?: string
+          rating?: number
+          sort_order?: number
           updated_at?: string
         }
         Relationships: []
