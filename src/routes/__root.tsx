@@ -12,7 +12,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
-import { FloatingActions } from "@/components/site/FloatingActions";
+
 import { Toaster } from "@/components/ui/sonner";
 import { SITE } from "@/lib/site";
 
@@ -119,7 +119,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <Footer />
-      <FloatingActions />
+      
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
