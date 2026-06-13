@@ -39,12 +39,12 @@ export function Nav() {
             scrolled ? "glass shadow-[var(--shadow-soft)]" : ""
           }`}
         >
-          <Link to="/" className="flex min-w-0 items-center gap-2.5">
+          <Link to="/" className="flex shrink-0 items-center gap-2.5">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full" style={{ background: "var(--gradient-primary)" }}>
               <Sparkles className="h-4 w-4 text-white" />
             </span>
-            <span className="truncate font-display text-base font-semibold sm:text-lg">
-              {SITE.short}
+            <span className="whitespace-nowrap font-display text-sm font-semibold sm:text-base">
+              {SITE.name}
             </span>
           </Link>
 
