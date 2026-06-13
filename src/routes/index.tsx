@@ -294,10 +294,10 @@ function Home() {
         </Reveal>
         <Reveal delay={0.1}>
           <Accordion type="single" collapsible className="mt-10">
-            {faqs.map((f, i) => (
-              <AccordionItem key={i} value={`f-${i}`} className="border-border">
-                <AccordionTrigger className="text-left font-display text-lg">{f.q}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
+            {(faqs ?? FALLBACK_FAQS).map((f: any, i: number) => (
+              <AccordionItem key={f.id ?? i} value={`f-${i}`} className="border-border">
+                <AccordionTrigger className="text-left font-display text-lg">{f.question}</AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{f.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
