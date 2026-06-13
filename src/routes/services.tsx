@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Check, HeartPulse } from "lucide-react";
 import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
-import { SERVICES, ADDITIONAL_SERVICES, SITE } from "@/lib/site";
+import { ADDITIONAL_SERVICES, SITE } from "@/lib/site";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -18,6 +20,18 @@ export const Route = createFileRoute("/services")({
 });
 
 function Services() {
+  const { data: services, isLoading } = useQuery({
+    queryKey: ["public", "services"],
+    queryFn: async () => {
+      const { data } = await (supabase as any)
+        .from("services")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true });
+      return data ?? [];
+    },
+  });
+
   return (
     <>
       <section className="container-px mx-auto max-w-7xl py-16 md:py-24">
@@ -31,27 +45,38 @@ function Services() {
           </p>
         </Reveal>
 
-        <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s) => (
-            <StaggerItem key={s.slug}>
-              <div className="card-elegant card-elegant-hover group relative h-full overflow-hidden p-7">
-                <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full opacity-30 blur-3xl transition-opacity group-hover:opacity-60" style={{ background: "var(--gradient-primary)" }} />
-                <div className="relative">
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl" style={{ background: "var(--gradient-primary)" }}>
-                    <HeartPulse className="h-5 w-5 text-white" />
+        {isLoading ? (
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="card-elegant h-72 animate-pulse p-7" />
+            ))}
+          </div>
+        ) : (
+          <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {services!.map((s: any) => (
+              <StaggerItem key={s.id}>
+                <div className="card-elegant card-elegant-hover group relative h-full overflow-hidden p-7">
+                  <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full opacity-30 blur-3xl transition-opacity group-hover:opacity-60" style={{ background: "var(--gradient-primary)" }} />
+                  <div className="relative">
+                    <div className="grid h-12 w-12 place-items-center rounded-2xl" style={{ background: "var(--gradient-primary)" }}>
+                      <HeartPulse className="h-5 w-5 text-white" />
+                    </div>
+                    <h3 className="mt-5 font-display text-xl font-semibold">{s.name}</h3>
+                    {s.price && <p className="mt-1 text-sm font-medium text-primary">{s.price}</p>}
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.short_description || s.description}</p>
+                    {Array.isArray(s.benefits) && s.benefits.length > 0 && (
+                      <ul className="mt-4 space-y-1.5 text-sm">
+                        {s.benefits.slice(0, 4).map((b: string) => (
+                          <li key={b} className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />{b}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  <h3 className="mt-5 font-display text-xl font-semibold">{s.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.blurb}</p>
-                  <ul className="mt-4 space-y-1.5 text-sm">
-                    <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" /> Expert specialist care</li>
-                    <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" /> Personalized plan</li>
-                    <li className="flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" /> Follow-up & support</li>
-                  </ul>
                 </div>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        )}
       </section>
 
       <section className="container-px mx-auto max-w-7xl py-16">
@@ -73,7 +98,7 @@ function Services() {
         <Reveal>
           <div className="rounded-[2rem] p-10 text-center text-white md:p-14" style={{ background: "var(--gradient-cta)" }}>
             <h2 className="font-display text-3xl font-semibold md:text-4xl">Not sure which service you need?</h2>
-            <p className="mx-auto mt-3 max-w-xl text-white/85">Book a consultation with Dr. Kavitha and we'll guide you to the right care.</p>
+            <p className="mx-auto mt-3 max-w-xl text-white/85">Book a consultation with {SITE.doctor.name} and we'll guide you to the right care.</p>
             <Link to="/appointment" className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-foreground transition-transform hover:scale-[1.03]">
               Book Appointment <ArrowRight className="h-4 w-4" />
             </Link>

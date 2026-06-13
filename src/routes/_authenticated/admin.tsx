@@ -4,6 +4,12 @@ import {
   LayoutDashboard,
   CalendarCheck2,
   MessagesSquare,
+  Users,
+  Wrench,
+  Star,
+  HelpCircle,
+  Settings,
+  Activity,
   LogOut,
   Sparkles,
   ShieldAlert,
@@ -58,10 +64,16 @@ function AdminShell() {
     );
   }
 
-  const nav: Array<{ to: "/admin" | "/admin/appointments" | "/admin/contacts"; label: string; icon: typeof LayoutDashboard; exact?: boolean }> = [
+  const nav: Array<{ to: any; label: string; icon: typeof LayoutDashboard; exact?: boolean }> = [
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
     { to: "/admin/appointments", label: "Appointments", icon: CalendarCheck2 },
+    { to: "/admin/patients", label: "Patients", icon: Users },
     { to: "/admin/contacts", label: "Messages", icon: MessagesSquare },
+    { to: "/admin/services", label: "Services", icon: Wrench },
+    { to: "/admin/testimonials", label: "Testimonials", icon: Star },
+    { to: "/admin/faqs", label: "FAQs", icon: HelpCircle },
+    { to: "/admin/settings", label: "Site Settings", icon: Settings },
+    { to: "/admin/activity", label: "Activity Log", icon: Activity },
   ];
 
   return (
