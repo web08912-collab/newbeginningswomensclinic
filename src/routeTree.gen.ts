@@ -14,7 +14,6 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as DoctorRouteImport } from './routes/doctor'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppointmentRouteImport } from './routes/appointment'
 import { Route as AboutRouteImport } from './routes/about'
@@ -48,11 +47,6 @@ const DoctorRoute = DoctorRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -107,7 +101,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/appointment': typeof AppointmentRoute
   '/auth': typeof AuthRoute
-  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/doctor': typeof DoctorRoute
   '/gallery': typeof GalleryRoute
@@ -123,7 +116,6 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/appointment': typeof AppointmentRoute
   '/auth': typeof AuthRoute
-  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/doctor': typeof DoctorRoute
   '/gallery': typeof GalleryRoute
@@ -140,7 +132,6 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/appointment': typeof AppointmentRoute
   '/auth': typeof AuthRoute
-  '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/doctor': typeof DoctorRoute
   '/gallery': typeof GalleryRoute
@@ -158,7 +149,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/appointment'
     | '/auth'
-    | '/blog'
     | '/contact'
     | '/doctor'
     | '/gallery'
@@ -174,7 +164,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/appointment'
     | '/auth'
-    | '/blog'
     | '/contact'
     | '/doctor'
     | '/gallery'
@@ -190,7 +179,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/appointment'
     | '/auth'
-    | '/blog'
     | '/contact'
     | '/doctor'
     | '/gallery'
@@ -208,7 +196,6 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AppointmentRoute: typeof AppointmentRoute
   AuthRoute: typeof AuthRoute
-  BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   DoctorRoute: typeof DoctorRoute
   GalleryRoute: typeof GalleryRoute
@@ -251,13 +238,6 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -358,7 +338,6 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AppointmentRoute: AppointmentRoute,
   AuthRoute: AuthRoute,
-  BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   DoctorRoute: DoctorRoute,
   GalleryRoute: GalleryRoute,
@@ -368,3 +347,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
