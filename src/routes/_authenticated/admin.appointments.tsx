@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Phone, Mail, Calendar, Search, Trash2 } from "lucide-react";
+import { Phone, Mail, Calendar, Search, Trash2, X, StickyNote } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logActivity } from "@/lib/settings";
+import { RowSkeleton } from "@/components/site/Skeleton";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/admin/appointments")({
@@ -10,11 +12,18 @@ export const Route = createFileRoute("/_authenticated/admin/appointments")({
 });
 
 const STATUSES = ["pending", "confirmed", "completed", "cancelled"] as const;
+const STATUS_COLORS: Record<string, string> = {
+  pending: "bg-amber-500/10 text-amber-600",
+  confirmed: "bg-blue-500/10 text-blue-600",
+  completed: "bg-emerald-500/10 text-emerald-600",
+  cancelled: "bg-rose-500/10 text-rose-600",
+};
 
 function AppointmentsPage() {
   const qc = useQueryClient();
   const [q, setQ] = useState("");
   const [status, setStatus] = useState<string>("all");
+  const [active, setActive] = useState<any | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin", "appointments", status, q],
@@ -39,7 +48,8 @@ function AppointmentsPage() {
   async function updateStatus(id: string, newStatus: string) {
     const { error } = await supabase.from("appointments").update({ status: newStatus }).eq("id", id);
     if (error) return toast.error(error.message);
-    toast.success("Updated");
+    toast.success("Status updated");
+    await logActivity("update_status", "appointment", id, { status: newStatus });
     qc.invalidateQueries({ queryKey: ["admin"] });
   }
 
@@ -48,6 +58,7 @@ function AppointmentsPage() {
     const { error } = await supabase.from("appointments").delete().eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Deleted");
+    await logActivity("delete", "appointment", id);
     qc.invalidateQueries({ queryKey: ["admin"] });
   }
 
@@ -55,65 +66,47 @@ function AppointmentsPage() {
     <div className="space-y-6">
       <header>
         <h1 className="font-display text-3xl font-semibold">Appointments</h1>
-        <p className="text-sm text-muted-foreground">Manage booking requests from your patients.</p>
+        <p className="text-sm text-muted-foreground">Manage booking requests and patient notes.</p>
       </header>
 
       <div className="flex flex-wrap items-center gap-3">
         <label className="flex flex-1 min-w-[200px] items-center gap-2 rounded-full glass px-4 py-2.5">
           <Search className="h-4 w-4 text-muted-foreground" />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search by name, phone, email…"
-            className="w-full bg-transparent text-sm outline-none"
-          />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name, phone, email…" className="w-full bg-transparent text-sm outline-none" />
         </label>
         <div className="flex flex-wrap gap-1 rounded-full bg-muted p-1">
           {["all", ...STATUSES].map((s) => (
-            <button
-              key={s}
-              onClick={() => setStatus(s)}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium capitalize transition ${
-                status === s ? "bg-background shadow-sm" : "text-muted-foreground"
-              }`}
-            >
-              {s}
-            </button>
+            <button key={s} onClick={() => setStatus(s)} className={`rounded-full px-3 py-1.5 text-xs font-medium capitalize transition ${status === s ? "bg-background shadow-sm" : "text-muted-foreground"}`}>{s}</button>
           ))}
         </div>
       </div>
 
       <div className="glass overflow-hidden rounded-3xl">
         {isLoading ? (
-          <p className="p-8 text-center text-sm text-muted-foreground">Loading…</p>
+          <div className="divide-y divide-border p-4">{Array.from({ length: 5 }).map((_, i) => <RowSkeleton key={i} />)}</div>
         ) : !data || data.length === 0 ? (
           <p className="p-8 text-center text-sm text-muted-foreground">No appointments found.</p>
         ) : (
           <div className="divide-y divide-border">
             {data.map((a: any) => (
               <div key={a.id} className="grid gap-3 p-4 sm:grid-cols-[1fr_auto] sm:items-center">
-                <div className="space-y-1">
+                <div className="space-y-1 cursor-pointer" onClick={() => setActive(a)}>
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="font-semibold">{a.full_name}</p>
                     {a.age ? <span className="text-xs text-muted-foreground">· {a.age} yrs</span> : null}
                     <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">{a.service}</span>
+                    {a.internal_notes && <StickyNote className="h-3.5 w-3.5 text-amber-500" />}
                   </div>
                   <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
                     <span className="inline-flex items-center gap-1"><Calendar className="h-3 w-3" />{a.preferred_date} · {a.preferred_time}</span>
-                    <a href={`tel:${a.phone}`} className="inline-flex items-center gap-1 hover:text-primary"><Phone className="h-3 w-3" />{a.phone}</a>
-                    {a.email ? <a href={`mailto:${a.email}`} className="inline-flex items-center gap-1 hover:text-primary"><Mail className="h-3 w-3" />{a.email}</a> : null}
+                    <a href={`tel:${a.phone}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:text-primary"><Phone className="h-3 w-3" />{a.phone}</a>
+                    {a.email ? <a href={`mailto:${a.email}`} onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 hover:text-primary"><Mail className="h-3 w-3" />{a.email}</a> : null}
                   </div>
                   {a.concern ? <p className="text-xs text-foreground/70 line-clamp-2">{a.concern}</p> : null}
                 </div>
                 <div className="flex items-center gap-2">
-                  <select
-                    value={a.status}
-                    onChange={(e) => updateStatus(a.id, e.target.value)}
-                    className="rounded-full border border-border bg-background px-3 py-1.5 text-xs capitalize focus:outline-none focus:ring-1 focus:ring-primary"
-                  >
-                    {STATUSES.map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
+                  <select value={a.status} onChange={(e) => updateStatus(a.id, e.target.value)} className={`rounded-full border-0 px-3 py-1.5 text-xs font-medium capitalize ${STATUS_COLORS[a.status] || "bg-muted"}`}>
+                    {STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
                   </select>
                   <button onClick={() => remove(a.id)} className="grid h-8 w-8 place-items-center rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive">
                     <Trash2 className="h-4 w-4" />
@@ -124,6 +117,73 @@ function AppointmentsPage() {
           </div>
         )}
       </div>
+
+      {active && <AppointmentDrawer apt={active} onClose={() => setActive(null)} />}
+    </div>
+  );
+}
+
+function AppointmentDrawer({ apt, onClose }: { apt: any; onClose: () => void }) {
+  const qc = useQueryClient();
+  const [notes, setNotes] = useState(apt.internal_notes ?? "");
+  const [followUp, setFollowUp] = useState(apt.follow_up_date ?? "");
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    setSaving(true);
+    const { error } = await supabase
+      .from("appointments")
+      .update({ internal_notes: notes, follow_up_date: followUp || null } as any)
+      .eq("id", apt.id);
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success("Saved");
+    await logActivity("update_notes", "appointment", apt.id);
+    qc.invalidateQueries({ queryKey: ["admin", "appointments"] });
+    onClose();
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex justify-end bg-foreground/40 backdrop-blur-sm" onClick={onClose}>
+      <div className="glass h-full w-full max-w-md overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-xl font-semibold">Patient Details</h2>
+          <button onClick={onClose} className="grid h-8 w-8 place-items-center rounded-full hover:bg-muted"><X className="h-4 w-4" /></button>
+        </div>
+        <div className="mt-6 space-y-4">
+          <Detail label="Name" value={apt.full_name} />
+          <Detail label="Age" value={apt.age?.toString()} />
+          <Detail label="Phone" value={apt.phone} />
+          <Detail label="Email" value={apt.email} />
+          <Detail label="Service" value={apt.service} />
+          <Detail label="Preferred" value={`${apt.preferred_date} · ${apt.preferred_time}`} />
+          <Detail label="Concern" value={apt.concern} />
+          <Detail label="Status" value={apt.status} />
+
+          <label className="block">
+            <span className="mb-1.5 block text-xs font-medium text-muted-foreground">Follow-up date</span>
+            <input type="date" className="input-base" value={followUp} onChange={(e) => setFollowUp(e.target.value)} />
+          </label>
+          <label className="block">
+            <span className="mb-1.5 block text-xs font-medium text-muted-foreground">Internal notes</span>
+            <textarea className="input-base min-h-[140px]" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Add private notes about this patient…" />
+          </label>
+        </div>
+        <div className="mt-6 flex justify-end gap-3">
+          <button onClick={onClose} className="rounded-full px-5 py-2 text-sm hover:bg-muted">Cancel</button>
+          <button onClick={save} disabled={saving} className="btn-hero btn-hero-hover !text-sm !py-2.5 disabled:opacity-50">{saving ? "Saving…" : "Save Notes"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Detail({ label, value }: { label: string; value?: string | null }) {
+  if (!value) return null;
+  return (
+    <div>
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-0.5 text-sm">{value}</p>
     </div>
   );
 }
