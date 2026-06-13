@@ -257,14 +257,14 @@ function Home() {
           </div>
         </Reveal>
         <Stagger className="mt-14 grid gap-6 md:grid-cols-3">
-          {testimonials.map((t) => (
-            <StaggerItem key={t.name}>
+          {(testimonials ?? FALLBACK_TESTIMONIALS).map((t: any) => (
+            <StaggerItem key={t.id}>
               <div className="card-elegant card-elegant-hover h-full p-7">
-                <div className="flex text-accent">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}</div>
-                <p className="mt-4 text-foreground/90 leading-relaxed">"{t.text}"</p>
+                <div className="flex text-accent">{Array.from({ length: t.rating ?? 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}</div>
+                <p className="mt-4 text-foreground/90 leading-relaxed">"{t.content}"</p>
                 <div className="mt-6">
-                  <div className="font-display text-lg font-semibold">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
+                  <div className="font-display text-lg font-semibold">{t.patient_name}</div>
+                  {t.patient_location && <div className="text-xs text-muted-foreground">{t.patient_location}</div>}
                 </div>
               </div>
             </StaggerItem>
