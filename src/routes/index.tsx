@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Award, HeartPulse, Microscope, ShieldCheck, Stethoscope, Sparkles, Star, ChevronDown, Phone } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
 import doctorImg from "@/assets/doctor.jpg";
@@ -8,6 +9,7 @@ import pregnancyImg from "@/assets/service-pregnancy.jpg";
 import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { CountUp } from "@/components/site/CountUp";
 import { SERVICES, SITE, ASSOCIATED_HOSPITALS } from "@/lib/site";
+import { supabase } from "@/integrations/supabase/client";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 export const Route = createFileRoute("/")({
