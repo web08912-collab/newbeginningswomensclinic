@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles, LayoutDashboard } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { SITE } from "@/lib/site";
+import { useAuth } from "@/lib/auth";
 
 const links = [
   { to: "/", label: "Home" },
@@ -17,6 +18,7 @@ const links = [
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -62,6 +64,11 @@ export function Nav() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle />
+            {isAdmin && (
+              <Link to="/admin" className="hidden sm:inline-flex h-10 items-center gap-1.5 rounded-full glass px-3 text-xs font-medium hover:bg-muted">
+                <LayoutDashboard className="h-3.5 w-3.5" /> Admin
+              </Link>
+            )}
             <Link to="/appointment" className="hidden btn-hero btn-hero-hover sm:inline-flex !py-2.5 !text-sm">
               Book Appointment
             </Link>
