@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Phone, Mail, MapPin, Clock, Sparkles } from "lucide-react";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { SITE } from "@/lib/site";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 export function Footer() {
   return (
@@ -9,9 +10,7 @@ export function Footer() {
         <div className="grid gap-12 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2.5">
-              <span className="grid h-10 w-10 place-items-center rounded-full" style={{ background: "var(--gradient-primary)" }}>
-                <Sparkles className="h-4 w-4 text-white" />
-              </span>
+              <img src={logoAsset.url} alt={SITE.name} className="h-11 w-11 object-contain" />
               <span className="font-display text-lg font-semibold">{SITE.short}</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Award, HeartPulse, Microscope, ShieldCheck, Stethoscope, Sparkles, Star, ChevronDown, Phone } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
-import doctorImg from "@/assets/doctor.jpg";
+import doctorImg from "@/assets/doctor.png.asset.json";
 import wellnessImg from "@/assets/service-wellness.jpg";
 import pregnancyImg from "@/assets/service-pregnancy.jpg";
 import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
@@ -98,7 +98,7 @@ function Home() {
             </motion.h1>
             <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.25 }}
               className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Expert gynecology, fertility, pregnancy care and women's wellness — led by Dr. Kavitha V Reddy with 20+ years of trusted experience.
+              Expert gynecology, fertility, pregnancy care and women's wellness — led by Dr. Kavitha V Reddy with 25+ years of trusted experience.
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.4 }}
               className="mt-8 flex flex-wrap items-center gap-3">
@@ -209,7 +209,7 @@ function Home() {
           <Reveal>
             <div className="relative">
               <div className="absolute -inset-6 -z-10 rounded-[2.5rem] opacity-50 blur-3xl" style={{ background: "var(--gradient-primary)" }} />
-              <img src={doctorImg} alt={SITE.doctor.name} loading="lazy" width={1024} height={1024} className="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-[var(--shadow-elegant)]" />
+              <img src={doctorImg.url} alt={SITE.doctor.name} loading="lazy" width={1024} height={1024} className="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-[var(--shadow-elegant)]" />
             </div>
           </Reveal>
           <Reveal delay={0.1}>
