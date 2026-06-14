@@ -3,7 +3,7 @@ export const SITE = {
   short: "New Beginnings",
   tagline: "Compassionate Women's Healthcare For Every Stage Of Life",
   description:
-    "Expert gynecology, fertility, pregnancy care and women's wellness services in Bangalore. Led by Dr. Kavitha V Reddy with 20+ years of trusted experience.",
+    "Expert gynecology, fertility, pregnancy care and women's wellness services in Bangalore. Led by Dr. Kavitha V Reddy with 25+ years of trusted experience.",
   phone: "+91 9535004789",
   phoneRaw: "+919535004789",
   whatsapp: "919535004789",
@@ -18,7 +18,7 @@ export const SITE = {
     name: "Dr. Kavitha V Reddy",
     creds: "MBBS, DGO",
     title: "Consultant Obstetrician & Gynecologist",
-    experience: "20+ Years Experience",
+    experience: "25+ Years Experience",
     specs: [
       "Obstetrics",
       "Gynecology",

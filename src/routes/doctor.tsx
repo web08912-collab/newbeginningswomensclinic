@@ -1,16 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Award, GraduationCap, Stethoscope, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
-import doctorImg from "@/assets/doctor.jpg";
+import doctorImg from "@/assets/doctor.png.asset.json";
 import { SITE, ASSOCIATED_HOSPITALS } from "@/lib/site";
 
 export const Route = createFileRoute("/doctor")({
   head: () => ({
     meta: [
-      { title: "Dr. Kavitha V Reddy — Gynecologist in Bangalore (20+ Yrs)" },
-      { name: "description", content: "Dr. Kavitha V Reddy, MBBS, DGO — Consultant Obstetrician & Gynecologist with 20+ years of experience in pregnancy care, fertility and laparoscopic surgery in Bangalore." },
+      { title: "Dr. Kavitha V Reddy — Gynecologist in Bangalore (25+ Yrs)" },
+      { name: "description", content: "Dr. Kavitha V Reddy, MBBS, DGO — Consultant Obstetrician & Gynecologist with 25+ years of experience in pregnancy care, fertility and laparoscopic surgery in Bangalore." },
       { property: "og:title", content: "Dr. Kavitha V Reddy — Gynecologist" },
-      { property: "og:description", content: "20+ years of compassionate gynecology and women's wellness care in Bangalore." },
+      { property: "og:description", content: "25+ years of compassionate gynecology and women's wellness care in Bangalore." },
       { property: "og:url", content: "/doctor" },
     ],
     links: [{ rel: "canonical", href: "/doctor" }],
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/doctor")({
 const credentials = [
   { icon: GraduationCap, title: "MBBS", body: "Bachelor of Medicine and Bachelor of Surgery" },
   { icon: GraduationCap, title: "DGO", body: "Diploma in Gynecology and Obstetrics" },
-  { icon: Stethoscope, title: "20+ Years", body: "Active clinical practice in Bangalore" },
+  { icon: Stethoscope, title: "25+ Years", body: "Active clinical practice in Bangalore" },
   { icon: Award, title: "Trusted Affiliations", body: "Apollo Cradle, Kauvery, Motherhood" },
 ];
 
@@ -43,7 +43,7 @@ function Doctor() {
           <Reveal className="lg:col-span-2">
             <div className="relative">
               <div className="absolute -inset-6 -z-10 rounded-[2.5rem] opacity-50 blur-3xl" style={{ background: "var(--gradient-primary)" }} />
-              <img src={doctorImg} alt={SITE.doctor.name} width={1024} height={1024} className="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-[var(--shadow-elegant)]" />
+              <img src={doctorImg.url} alt={SITE.doctor.name} width={1024} height={1024} className="aspect-[4/5] w-full rounded-[2rem] object-cover shadow-[var(--shadow-elegant)]" />
             </div>
           </Reveal>
           <Reveal delay={0.1} className="lg:col-span-3">

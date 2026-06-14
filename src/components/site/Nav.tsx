@@ -38,9 +38,7 @@ export function Nav() {
           }`}
         >
           <Link to="/" className="flex shrink-0 items-center gap-2.5">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full" style={{ background: "var(--gradient-primary)" }}>
-              <Sparkles className="h-4 w-4 text-white" />
-            </span>
+            <img src={logoAsset.url} alt={SITE.name} className="h-10 w-10 shrink-0 object-contain" />
             <span className="whitespace-nowrap font-display text-sm font-semibold sm:text-base">
               {SITE.name}
             </span>
