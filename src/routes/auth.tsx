@@ -12,8 +12,8 @@ import { useServerFn } from "@tanstack/react-start";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign In — New Beginnings Clinic Admin" },
-      { name: "description", content: "Secure sign in for clinic staff and administrators." },
+      { title: "Sign In — New Beginnings Women's Clinic" },
+      { name: "description", content: "Secure sign-in for patients and clinic staff." },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),
@@ -118,8 +118,8 @@ function AuthPage() {
           <span className="mx-auto grid h-12 w-12 place-items-center rounded-full" style={{ background: "var(--gradient-primary)" }}>
             <Sparkles className="h-5 w-5 text-white" />
           </span>
-          <h1 className="mt-3 font-display text-2xl font-semibold">Clinic Admin</h1>
-          <p className="text-sm text-muted-foreground">Secure access for staff</p>
+          <h1 className="mt-3 font-display text-2xl font-semibold">Welcome</h1>
+          <p className="text-sm text-muted-foreground">Sign in to your patient portal or staff dashboard</p>
         </div>
 
         <div className="mb-6 flex rounded-full bg-muted p-1">
