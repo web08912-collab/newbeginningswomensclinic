@@ -117,6 +117,17 @@ function Appointment() {
               </select>
             </div>
 
+            {doctors && doctors.length > 0 && (
+              <div>
+                <Label>Preferred doctor (optional)</Label>
+                <select name="doctor_id" defaultValue=""
+                  className="mt-1.5 w-full rounded-2xl border border-input bg-background px-4 py-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/30">
+                  <option value="">No preference</option>
+                  {doctors.map((d) => <option key={d.id} value={d.id}>{d.name}{d.specialization ? ` — ${d.specialization}` : ""}</option>)}
+                </select>
+              </div>
+            )}
+
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
                 <Label><Calendar className="mr-1 inline h-4 w-4" /> Preferred date *</Label>
