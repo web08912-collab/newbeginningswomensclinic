@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { SITE } from "@/lib/site";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 const links = [
   { to: "/", label: "Home" },
