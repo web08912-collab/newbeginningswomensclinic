@@ -52,6 +52,7 @@ export type Database = {
           age: number | null
           concern: string | null
           created_at: string
+          doctor_id: string | null
           email: string | null
           follow_up_date: string | null
           full_name: string
@@ -69,6 +70,7 @@ export type Database = {
           age?: number | null
           concern?: string | null
           created_at?: string
+          doctor_id?: string | null
           email?: string | null
           follow_up_date?: string | null
           full_name: string
@@ -86,6 +88,7 @@ export type Database = {
           age?: number | null
           concern?: string | null
           created_at?: string
+          doctor_id?: string | null
           email?: string | null
           follow_up_date?: string | null
           full_name?: string
@@ -99,7 +102,15 @@ export type Database = {
           status?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       contacts: {
         Row: {
@@ -140,6 +151,66 @@ export type Database = {
         }
         Relationships: []
       }
+      doctors: {
+        Row: {
+          bio: string | null
+          consultation_fee: string | null
+          created_at: string
+          email: string | null
+          experience_years: number | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          is_featured: boolean
+          languages: string[] | null
+          name: string
+          phone: string | null
+          qualifications: string | null
+          slug: string
+          sort_order: number
+          specialization: string | null
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          consultation_fee?: string | null
+          created_at?: string
+          email?: string | null
+          experience_years?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          languages?: string[] | null
+          name: string
+          phone?: string | null
+          qualifications?: string | null
+          slug: string
+          sort_order?: number
+          specialization?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          consultation_fee?: string | null
+          created_at?: string
+          email?: string | null
+          experience_years?: number | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_featured?: boolean
+          languages?: string[] | null
+          name?: string
+          phone?: string | null
+          qualifications?: string | null
+          slug?: string
+          sort_order?: number
+          specialization?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       faqs: {
         Row: {
           answer: string
@@ -170,6 +241,48 @@ export type Database = {
           question?: string
           sort_order?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      patient_documents: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          file_path: string
+          file_size: number | null
+          id: string
+          mime_type: string | null
+          patient_id: string
+          title: string
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          file_path: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          patient_id: string
+          title: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          patient_id?: string
+          title?: string
+          updated_at?: string
+          uploaded_by?: string | null
         }
         Relationships: []
       }
