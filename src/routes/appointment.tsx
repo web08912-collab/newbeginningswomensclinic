@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, ArrowRight, Calendar, Clock } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
 import { SITE, SERVICES } from "@/lib/site";
@@ -28,6 +29,7 @@ const schema = z.object({
   phone: z.string().trim().min(7, "Enter a valid phone").max(20),
   email: z.string().trim().email("Enter a valid email").max(255).optional().or(z.literal("")),
   service: z.string().min(1, "Please pick a service"),
+  doctor_id: z.string().optional().or(z.literal("")),
   preferred_date: z.string().min(1, "Pick a date"),
   preferred_time: z.string().min(1, "Pick a time"),
   concern: z.string().trim().max(300).optional(),
@@ -40,6 +42,18 @@ function Appointment() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
+  const { data: doctors } = useQuery({
+    queryKey: ["public", "doctors"],
+    queryFn: async () => {
+      const { data } = await (supabase as any)
+        .from("doctors")
+        .select("id,name,specialization")
+        .eq("is_active", true)
+        .order("sort_order");
+      return (data ?? []) as Array<{ id: string; name: string; specialization: string | null }>;
+    },
+  });
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
@@ -49,7 +63,8 @@ function Appointment() {
       return;
     }
     setLoading(true);
-    const payload = { ...parsed.data, email: parsed.data.email || null };
+    const payload: any = { ...parsed.data, email: parsed.data.email || null };
+    if (!payload.doctor_id) delete payload.doctor_id;
     const { error } = await supabase.from("appointments").insert(payload as never);
     setLoading(false);
     if (error) { toast.error("Could not book. Please try again."); return; }
@@ -101,6 +116,17 @@ function Appointment() {
                 <option value="General consultation">General consultation</option>
               </select>
             </div>
+
+            {doctors && doctors.length > 0 && (
+              <div>
+                <Label>Preferred doctor (optional)</Label>
+                <select name="doctor_id" defaultValue=""
+                  className="mt-1.5 w-full rounded-2xl border border-input bg-background px-4 py-3 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/30">
+                  <option value="">No preference</option>
+                  {doctors.map((d) => <option key={d.id} value={d.id}>{d.name}{d.specialization ? ` — ${d.specialization}` : ""}</option>)}
+                </select>
+              </div>
+            )}
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
