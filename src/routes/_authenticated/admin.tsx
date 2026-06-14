@@ -11,12 +11,14 @@ import {
   Settings,
   Activity,
   LogOut,
-  Sparkles,
   ShieldAlert,
+  Stethoscope,
+  FileText,
 } from "lucide-react";
 import { useAuth, signOut } from "@/lib/auth";
 import { SITE } from "@/lib/site";
 import { toast } from "sonner";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -68,7 +70,9 @@ function AdminShell() {
     { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
     { to: "/admin/appointments", label: "Appointments", icon: CalendarCheck2 },
     { to: "/admin/patients", label: "Patients", icon: Users },
+    { to: "/admin/documents", label: "Documents", icon: FileText },
     { to: "/admin/contacts", label: "Messages", icon: MessagesSquare },
+    { to: "/admin/doctors", label: "Doctors", icon: Stethoscope },
     { to: "/admin/services", label: "Services", icon: Wrench },
     { to: "/admin/testimonials", label: "Testimonials", icon: Star },
     { to: "/admin/faqs", label: "FAQs", icon: HelpCircle },
@@ -81,9 +85,7 @@ function AdminShell() {
       <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
         <aside className="glass h-fit rounded-3xl p-5 lg:sticky lg:top-24">
           <Link to="/" className="flex items-center gap-2.5 px-2 pb-4">
-            <span className="grid h-9 w-9 place-items-center rounded-full" style={{ background: "var(--gradient-primary)" }}>
-              <Sparkles className="h-4 w-4 text-white" />
-            </span>
+            <img src={logoAsset.url} alt={SITE.name} className="h-9 w-9 object-contain" />
             <span className="font-display text-sm font-semibold">{SITE.short}</span>
           </Link>
           <nav className="space-y-1">
