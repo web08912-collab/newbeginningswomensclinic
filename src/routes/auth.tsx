@@ -34,14 +34,24 @@ const signInSchema = z.object({
 
 function AuthPage() {
   const navigate = useNavigate();
-  const { session, loading } = useAuth();
+  const { session, isAdmin, loading } = useAuth();
   const [tab, setTab] = useState<"signin" | "signup">("signin");
   const [busy, setBusy] = useState(false);
   const claimAdmin = useServerFn(claimAdminRole);
 
   useEffect(() => {
-    if (!loading && session) navigate({ to: "/admin" });
-  }, [loading, session, navigate]);
+    if (!loading && session) navigate({ to: isAdmin ? "/admin" : "/portal" });
+  }, [loading, session, isAdmin, navigate]);
+
+  async function routeAfterAuth(userId: string) {
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    navigate({ to: data ? "/admin" : "/portal" });
+  }
 
   async function handleSignIn(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -52,11 +62,11 @@ function AuthPage() {
       return;
     }
     setBusy(true);
-    const { error } = await supabase.auth.signInWithPassword(parsed.data);
+    const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
     setBusy(false);
     if (error) return toast.error(error.message);
     toast.success("Welcome back");
-    navigate({ to: "/admin" });
+    if (data.user) await routeAfterAuth(data.user.id);
   }
 
   async function handleSignUp(e: React.FormEvent<HTMLFormElement>) {
@@ -72,7 +82,7 @@ function AuthPage() {
       email: parsed.data.email,
       password: parsed.data.password,
       options: {
-        emailRedirectTo: `${window.location.origin}/admin`,
+        emailRedirectTo: `${window.location.origin}/portal`,
         data: { full_name: parsed.data.full_name, phone: parsed.data.phone },
       },
     });
@@ -80,10 +90,11 @@ function AuthPage() {
       setBusy(false);
       return toast.error(error.message);
     }
-    // If admin code provided, claim admin role
+    let becameAdmin = false;
     if (parsed.data.admin_code && data.session) {
       try {
         await claimAdmin({ data: { code: parsed.data.admin_code } });
+        becameAdmin = true;
         toast.success("Admin access granted");
       } catch (err: any) {
         toast.error(err?.message ?? "Invalid admin code");
@@ -92,7 +103,7 @@ function AuthPage() {
       toast.success("Account created");
     }
     setBusy(false);
-    navigate({ to: "/admin" });
+    navigate({ to: becameAdmin ? "/admin" : "/portal" });
   }
 
   return (
