@@ -27,11 +27,11 @@ function PortalShell() {
     return <div className="grid min-h-[60vh] place-items-center text-sm text-muted-foreground">Loading…</div>;
   }
 
-  const nav = [
+  const nav: Array<{ to: any; label: string; icon: typeof LayoutDashboard; exact?: boolean }> = [
     { to: "/portal", label: "Dashboard", icon: LayoutDashboard, exact: true },
     { to: "/portal/appointments", label: "My Appointments", icon: CalendarDays },
     { to: "/portal/documents", label: "My Documents", icon: FileText },
-  ] as const;
+  ];
 
   return (
     <div className="container-px mx-auto max-w-7xl py-8">
