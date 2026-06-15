@@ -6,7 +6,7 @@ import {
   TrendingUp, AlertCircle, CheckCircle2, XCircle,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { CardSkeleton } from "@/components/site/Skeleton";
+import { CardSkeleton, RowSkeleton, Shimmer } from "@/components/site/Skeleton";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   component: Dashboard,
