@@ -258,7 +258,9 @@ function Home() {
           </div>
         </Reveal>
         <Stagger className="mt-14 grid gap-6 md:grid-cols-3">
-          {(testimonials ?? FALLBACK_TESTIMONIALS).map((t: any) => (
+          {loadingTestimonials
+            ? Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)
+            : (testimonials ?? FALLBACK_TESTIMONIALS).map((t: any) => (
             <StaggerItem key={t.id}>
               <div className="card-elegant card-elegant-hover h-full p-7">
                 <div className="flex text-accent">{Array.from({ length: t.rating ?? 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}</div>
