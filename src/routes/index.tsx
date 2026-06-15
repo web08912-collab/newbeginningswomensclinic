@@ -11,6 +11,7 @@ import { CountUp } from "@/components/site/CountUp";
 import { SERVICES, SITE, ASSOCIATED_HOSPITALS } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { CardSkeleton, Shimmer } from "@/components/site/Skeleton";
 
 export const Route = createFileRoute("/")({
   head: () => ({
