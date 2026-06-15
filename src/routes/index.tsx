@@ -55,7 +55,7 @@ const FALLBACK_FAQS = [
 ];
 
 function Home() {
-  const { data: testimonials } = useQuery({
+  const { data: testimonials, isLoading: loadingTestimonials } = useQuery({
     queryKey: ["public", "testimonials"],
     queryFn: async () => {
       const { data } = await (supabase as any)
@@ -67,7 +67,7 @@ function Home() {
       return (data && data.length > 0 ? data : FALLBACK_TESTIMONIALS) as any[];
     },
   });
-  const { data: faqs } = useQuery({
+  const { data: faqs, isLoading: loadingFaqs } = useQuery({
     queryKey: ["public", "faqs"],
     queryFn: async () => {
       const { data } = await (supabase as any)
