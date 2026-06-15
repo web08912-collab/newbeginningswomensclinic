@@ -130,57 +130,74 @@ function Dashboard() {
         <div className="glass rounded-3xl p-6">
           <h2 className="font-display text-lg font-semibold">Appointment Pipeline</h2>
           <div className="mt-5 space-y-4">
-            {pipeline.map((p) => (
-              <div key={p.label} className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <p.icon className={`h-4 w-4 ${p.color}`} />
-                  <span className="text-sm">{p.label}</span>
-                </div>
-                <span className="font-display text-xl font-semibold">{p.value ?? 0}</span>
-              </div>
-            ))}
+            {isLoading
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between gap-3">
+                    <Shimmer className="h-4 w-24" />
+                    <Shimmer className="h-6 w-10" />
+                  </div>
+                ))
+              : pipeline.map((p) => (
+                  <div key={p.label} className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <p.icon className={`h-4 w-4 ${p.color}`} />
+                      <span className="text-sm">{p.label}</span>
+                    </div>
+                    <span className="font-display text-xl font-semibold">{p.value ?? 0}</span>
+                  </div>
+                ))}
           </div>
         </div>
 
         <div className="glass rounded-3xl p-6">
           <h2 className="font-display text-lg font-semibold">Last 7 days</h2>
-          <div className="mt-5 flex h-40 items-end justify-between gap-2">
-            {(weekly ?? []).map((w, i) => (
-              <motion.div
-                key={w.day}
-                initial={{ height: 0 }}
-                animate={{ height: `${(w.count / maxCount) * 100}%` }}
-                transition={{ delay: i * 0.04, duration: 0.5, ease: "easeOut" }}
-                className="flex flex-1 flex-col items-center gap-2"
-              >
-                <div className="relative w-full flex-1">
-                  <div
-                    className="absolute inset-x-0 bottom-0 rounded-t-lg"
-                    style={{ height: `${(w.count / maxCount) * 100}%`, background: "var(--gradient-primary)" }}
-                  >
-                    <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-xs font-medium">{w.count}</span>
+          {loadingWeekly ? (
+            <div className="mt-5 flex h-40 items-end justify-between gap-2">
+              {Array.from({ length: 7 }).map((_, i) => (
+                <Shimmer key={i} className="h-full w-full" />
+              ))}
+            </div>
+          ) : (
+            <div className="mt-5 flex h-40 items-end justify-between gap-2">
+              {(weekly ?? []).map((w, i) => (
+                <motion.div
+                  key={w.day}
+                  initial={{ height: 0 }}
+                  animate={{ height: `${(w.count / maxCount) * 100}%` }}
+                  transition={{ delay: i * 0.04, duration: 0.5, ease: "easeOut" }}
+                  className="flex flex-1 flex-col items-center gap-2"
+                >
+                  <div className="relative w-full flex-1">
+                    <div
+                      className="absolute inset-x-0 bottom-0 rounded-t-lg"
+                      style={{ height: `${(w.count / maxCount) * 100}%`, background: "var(--gradient-primary)" }}
+                    >
+                      <span className="absolute -top-5 left-1/2 -translate-x-1/2 text-xs font-medium">{w.count}</span>
+                    </div>
                   </div>
-                </div>
-                <span className="text-[10px] text-muted-foreground">{w.label}</span>
-              </motion.div>
-            ))}
-          </div>
+                  <span className="text-[10px] text-muted-foreground">{w.label}</span>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        {cms.map((c) => (
-          <Link key={c.label} to={c.to} className="glass card-elegant-hover rounded-2xl p-5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wide text-muted-foreground">{c.label}</span>
-              <c.icon className="h-4 w-4 text-primary" />
-            </div>
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="font-display text-2xl font-semibold">{c.value ?? 0}</span>
-              {c.total ? <span className="text-xs text-muted-foreground">/ {c.total}</span> : null}
-            </div>
-          </Link>
-        ))}
+        {isLoading
+          ? Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)
+          : cms.map((c) => (
+              <Link key={c.label} to={c.to} className="glass card-elegant-hover rounded-2xl p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs uppercase tracking-wide text-muted-foreground">{c.label}</span>
+                  <c.icon className="h-4 w-4 text-primary" />
+                </div>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-display text-2xl font-semibold">{c.value ?? 0}</span>
+                  {c.total ? <span className="text-xs text-muted-foreground">/ {c.total}</span> : null}
+                </div>
+              </Link>
+            ))}
       </div>
 
       <div className="glass rounded-3xl p-6">
@@ -188,7 +205,11 @@ function Dashboard() {
           <h2 className="font-display text-lg font-semibold">Recent Appointments</h2>
           <Link to="/admin/appointments" className="text-xs text-primary hover:underline">View all →</Link>
         </div>
-        {recent && recent.length > 0 ? (
+        {loadingRecent ? (
+          <div className="divide-y divide-border">
+            {Array.from({ length: 4 }).map((_, i) => <RowSkeleton key={i} />)}
+          </div>
+        ) : recent && recent.length > 0 ? (
           <div className="divide-y divide-border">
             {recent.map((a: any) => (
               <div key={a.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
