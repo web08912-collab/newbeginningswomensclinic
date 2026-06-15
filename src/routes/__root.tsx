@@ -15,6 +15,8 @@ import { Footer } from "@/components/site/Footer";
 
 import { Toaster } from "@/components/ui/sonner";
 import { SITE } from "@/lib/site";
+import { PageTransition } from "@/components/site/PageTransition";
+import { ScrollProgress } from "@/components/site/ScrollProgress";
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
