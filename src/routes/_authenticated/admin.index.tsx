@@ -60,7 +60,7 @@ function Dashboard() {
     },
   });
 
-  const { data: weekly } = useQuery({
+  const { data: weekly, isLoading: loadingWeekly } = useQuery({
     queryKey: ["admin", "weekly-trend"],
     queryFn: async () => {
       const days = Array.from({ length: 7 }, (_, i) => {
