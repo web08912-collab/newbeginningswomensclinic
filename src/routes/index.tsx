@@ -296,14 +296,20 @@ function Home() {
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <Accordion type="single" collapsible className="mt-10">
-            {(faqs ?? FALLBACK_FAQS).map((f: any, i: number) => (
-              <AccordionItem key={f.id ?? i} value={`f-${i}`} className="border-border">
-                <AccordionTrigger className="text-left font-display text-lg">{f.question}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{f.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          {loadingFaqs ? (
+            <div className="mt-10 space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => <Shimmer key={i} className="h-14 w-full" />)}
+            </div>
+          ) : (
+            <Accordion type="single" collapsible className="mt-10">
+              {(faqs ?? FALLBACK_FAQS).map((f: any, i: number) => (
+                <AccordionItem key={f.id ?? i} value={`f-${i}`} className="border-border">
+                  <AccordionTrigger className="text-left font-display text-lg">{f.question}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">{f.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          )}
         </Reveal>
       </section>
 
