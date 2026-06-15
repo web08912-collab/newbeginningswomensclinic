@@ -11,6 +11,7 @@ import { CountUp } from "@/components/site/CountUp";
 import { SERVICES, SITE, ASSOCIATED_HOSPITALS } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { CardSkeleton, Shimmer } from "@/components/site/Skeleton";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,7 +55,7 @@ const FALLBACK_FAQS = [
 ];
 
 function Home() {
-  const { data: testimonials } = useQuery({
+  const { data: testimonials, isLoading: loadingTestimonials } = useQuery({
     queryKey: ["public", "testimonials"],
     queryFn: async () => {
       const { data } = await (supabase as any)
@@ -66,7 +67,7 @@ function Home() {
       return (data && data.length > 0 ? data : FALLBACK_TESTIMONIALS) as any[];
     },
   });
-  const { data: faqs } = useQuery({
+  const { data: faqs, isLoading: loadingFaqs } = useQuery({
     queryKey: ["public", "faqs"],
     queryFn: async () => {
       const { data } = await (supabase as any)
@@ -257,7 +258,9 @@ function Home() {
           </div>
         </Reveal>
         <Stagger className="mt-14 grid gap-6 md:grid-cols-3">
-          {(testimonials ?? FALLBACK_TESTIMONIALS).map((t: any) => (
+          {loadingTestimonials
+            ? Array.from({ length: 3 }).map((_, i) => <CardSkeleton key={i} />)
+            : (testimonials ?? FALLBACK_TESTIMONIALS).map((t: any) => (
             <StaggerItem key={t.id}>
               <div className="card-elegant card-elegant-hover h-full p-7">
                 <div className="flex text-accent">{Array.from({ length: t.rating ?? 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}</div>
@@ -293,14 +296,20 @@ function Home() {
           </div>
         </Reveal>
         <Reveal delay={0.1}>
-          <Accordion type="single" collapsible className="mt-10">
-            {(faqs ?? FALLBACK_FAQS).map((f: any, i: number) => (
-              <AccordionItem key={f.id ?? i} value={`f-${i}`} className="border-border">
-                <AccordionTrigger className="text-left font-display text-lg">{f.question}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{f.answer}</AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          {loadingFaqs ? (
+            <div className="mt-10 space-y-3">
+              {Array.from({ length: 4 }).map((_, i) => <Shimmer key={i} className="h-14 w-full" />)}
+            </div>
+          ) : (
+            <Accordion type="single" collapsible className="mt-10">
+              {(faqs ?? FALLBACK_FAQS).map((f: any, i: number) => (
+                <AccordionItem key={f.id ?? i} value={`f-${i}`} className="border-border">
+                  <AccordionTrigger className="text-left font-display text-lg">{f.question}</AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">{f.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          )}
         </Reveal>
       </section>
 
