@@ -52,7 +52,7 @@ function Dashboard() {
     },
   });
 
-  const { data: recent } = useQuery({
+  const { data: recent, isLoading: loadingRecent } = useQuery({
     queryKey: ["admin", "recent-appointments"],
     queryFn: async () => {
       const { data } = await supabase.from("appointments").select("*").order("created_at", { ascending: false }).limit(6);
