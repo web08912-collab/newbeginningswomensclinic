@@ -43,7 +43,7 @@ function Appointment() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
-  const { data: doctors } = useQuery({
+  const { data: doctors, isLoading: loadingDoctors } = useQuery({
     queryKey: ["public", "doctors"],
     queryFn: async () => {
       const { data } = await (supabase as any)
