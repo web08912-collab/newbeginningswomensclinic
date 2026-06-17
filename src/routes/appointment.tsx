@@ -5,6 +5,7 @@ import { CheckCircle2, ArrowRight, Calendar, Clock } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
 import { SITE, SERVICES } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
+import { Shimmer } from "@/components/site/Skeleton";
 import { toast } from "sonner";
 import { z } from "zod";
 import { motion } from "framer-motion";
@@ -42,7 +43,7 @@ function Appointment() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
-  const { data: doctors } = useQuery({
+  const { data: doctors, isLoading: loadingDoctors } = useQuery({
     queryKey: ["public", "doctors"],
     queryFn: async () => {
       const { data } = await (supabase as any)
@@ -117,7 +118,12 @@ function Appointment() {
               </select>
             </div>
 
-            {doctors && doctors.length > 0 && (
+            {loadingDoctors ? (
+              <div>
+                <Label>Preferred doctor (optional)</Label>
+                <Shimmer className="mt-1.5 h-12 w-full rounded-2xl" />
+              </div>
+            ) : doctors && doctors.length > 0 ? (
               <div>
                 <Label>Preferred doctor (optional)</Label>
                 <select name="doctor_id" defaultValue=""
@@ -126,7 +132,7 @@ function Appointment() {
                   {doctors.map((d) => <option key={d.id} value={d.id}>{d.name}{d.specialization ? ` — ${d.specialization}` : ""}</option>)}
                 </select>
               </div>
-            )}
+            ) : null}
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
