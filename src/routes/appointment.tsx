@@ -5,6 +5,7 @@ import { CheckCircle2, ArrowRight, Calendar, Clock } from "lucide-react";
 import { Reveal } from "@/components/site/Reveal";
 import { SITE, SERVICES } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
+import { Shimmer } from "@/components/site/Skeleton";
 import { toast } from "sonner";
 import { z } from "zod";
 import { motion } from "framer-motion";
