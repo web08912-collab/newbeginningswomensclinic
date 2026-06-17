@@ -118,7 +118,12 @@ function Appointment() {
               </select>
             </div>
 
-            {doctors && doctors.length > 0 && (
+            {loadingDoctors ? (
+              <div>
+                <Label>Preferred doctor (optional)</Label>
+                <Shimmer className="mt-1.5 h-12 w-full rounded-2xl" />
+              </div>
+            ) : doctors && doctors.length > 0 ? (
               <div>
                 <Label>Preferred doctor (optional)</Label>
                 <select name="doctor_id" defaultValue=""
@@ -127,7 +132,7 @@ function Appointment() {
                   {doctors.map((d) => <option key={d.id} value={d.id}>{d.name}{d.specialization ? ` — ${d.specialization}` : ""}</option>)}
                 </select>
               </div>
-            )}
+            ) : null}
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
