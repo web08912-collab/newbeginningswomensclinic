@@ -1,0 +1,19 @@
+INSERT INTO public.faqs (category, question, answer, sort_order, is_active) VALUES
+('General', 'Where is the clinic located?', 'New Beginnings Women''s Clinic is located at No. 2, Ground Floor, SLV Plaza, Arvind Avenue, Kundalahalli Gate, Bangalore – 560037. Ample parking is available nearby and the clinic is easily accessible from Whitefield, Marathahalli and ITPL.', 6, true),
+('General', 'Is the clinic women-only?', 'Yes, our clinical care is focused exclusively on women''s health — from adolescence through pregnancy, fertility and menopause. Partners and family members are always welcome to accompany you for consultations.', 7, true),
+('General', 'How can I contact the clinic in an emergency?', 'For urgent concerns during clinic hours (Mon–Sat, 8 AM – 8 PM), please call +91 9535004789. For after-hours emergencies, visit the nearest hospital and inform us at your earliest convenience so we can coordinate ongoing care.', 8, true),
+
+('Appointments', 'Can I reschedule or cancel my appointment?', 'Yes. You can reschedule or cancel through your patient portal, or by calling us at least 4 hours before your slot so we can offer it to another patient.', 9, true),
+('Appointments', 'Do I need to bring anything to my first visit?', 'Please bring a photo ID, any previous medical records or scan reports, a list of current medications, and your menstrual cycle dates if relevant. Arriving 10 minutes early helps us complete registration smoothly.', 10, true),
+('Appointments', 'Are online or video consultations available?', 'Yes, we offer secure video consultations for follow-ups, report reviews and non-examination consultations. Request a teleconsultation slot when booking your appointment.', 11, true),
+
+('Services', 'Do you offer pregnancy and antenatal care?', 'Yes. Dr. Kavitha V Reddy provides comprehensive antenatal care including routine check-ups, ultrasound monitoring, nutritional counselling, high-risk pregnancy management and delivery planning with our associated hospitals.', 12, true),
+('Services', 'Do you treat PCOS and hormonal disorders?', 'Absolutely. We offer evaluation and long-term care for PCOS, PCOD, irregular periods, thyroid-related cycle issues and other hormonal imbalances, combining medical treatment with lifestyle guidance.', 13, true),
+('Services', 'Do you provide fertility and IVF consultations?', 'Yes. We offer fertility evaluation for couples, ovulation tracking, IUI guidance and IVF counselling. For advanced procedures we coordinate with leading partner hospitals including Apollo Cradle, Kauvery Hospital and Motherhood Fertility.', 14, true),
+('Services', 'Is ultrasound available at the clinic?', 'Yes, high-resolution ultrasound including obstetric and pelvic scans is available on-site, so most scans can be done during the same visit as your consultation.', 15, true),
+
+('Insurance', 'Do you provide cashless treatment?', 'Cashless facilities depend on the procedure and your insurer''s network. For surgeries done at our partner hospitals, the hospital''s insurance desk will assist with cashless processing. Please call ahead so we can guide you.', 16, true),
+('Insurance', 'Will I receive a detailed invoice for reimbursement?', 'Yes. We provide itemised invoices, prescriptions and reports that can be submitted to your insurer or employer for reimbursement.', 17, true),
+
+('Privacy', 'Is my medical information kept confidential?', 'Yes. All consultations, reports and records are strictly confidential and accessible only to you and your treating clinician. Your data is never shared without your written consent.', 18, true),
+('Privacy', 'Can I access my reports online?', 'Yes. Once you''re registered, your prescriptions, lab reports and visit summaries are available securely through your patient portal, anytime.', 19, true);
