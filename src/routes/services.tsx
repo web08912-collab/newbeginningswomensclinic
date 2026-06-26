@@ -56,7 +56,11 @@ function Services() {
           <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {services!.map((s: any) => (
               <StaggerItem key={s.id}>
-                <div className="card-elegant card-elegant-hover group relative h-full overflow-hidden p-7">
+                <Link
+                  to="/services/$slug"
+                  params={{ slug: s.slug }}
+                  className="card-elegant card-elegant-hover group relative block h-full overflow-hidden p-7"
+                >
                   <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full opacity-30 blur-3xl transition-opacity group-hover:opacity-60" style={{ background: "var(--gradient-primary)" }} />
                   <div className="relative">
                     <div className="grid h-12 w-12 place-items-center rounded-2xl" style={{ background: "var(--gradient-primary)" }}>
@@ -72,11 +76,15 @@ function Services() {
                         ))}
                       </ul>
                     )}
+                    <p className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                      Learn more <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </p>
                   </div>
-                </div>
+                </Link>
               </StaggerItem>
             ))}
           </Stagger>
+
         )}
       </section>
 
