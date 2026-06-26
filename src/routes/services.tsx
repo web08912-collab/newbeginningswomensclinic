@@ -5,6 +5,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/site/Reveal";
 import { ADDITIONAL_SERVICES, SITE } from "@/lib/site";
 import { supabase } from "@/integrations/supabase/client";
 
+
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
